@@ -1,0 +1,117 @@
+---
+title: "Homework 1"
+output:
+  pdf_document: default
+  word_document: default
+date: "`r Sys.Date()`"
+subtitle: Due Wednesday Sep 2
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+For each assignment, turn in by the due date/time.  Late assignments must be  arranged prior to submission.  In every case, assignments are to be typed neatly using proper English in Markdown.
+
+This week, we spoke about Reproducible Research, R, Rstudio, Rmarkdown, and LaTeX.  To summarize the ideas behind Reproducible Research, we are focusing on Reproducible Analysis.  For us, Reproducible Analysis is accomplished by mixing code, figures and text into a cohesive document that fully describes both the process we took to go from data to results and the rational behind our data driven conclusions.  Our goal should be to enable a moderately informed reader to follow our document and reproduce the steps we took to reach the results and hopefully conclusions we obtained.
+
+# Problem 1
+
+R is an open source, community built, programming platform.  Not only is there a plethra of useful web based resources, there also exist in-R tutorials.  Please do both of the Primers labeled as The Basics on Rstudio.cloud.
+
+# Problem 2
+
+Now that we have the R environment setup and have a basic understanding of R, let's add Markdown (choose File, New File, R Markdown, pdf).  
+
+Let's go ahead and save the file as is.  Save the file to the directory containing the *README.md* file you created and committed to your git repo in Homework 0.  The filename should be: HW1_pid, i.e. for me it would be HW1_rsettlag.
+
+You will use this new R Markdown file for the remainder of this homework.
+
+### Part A
+In this new Rmarkdown file, please type a paragraph about what you are hoping to get out of this class.  Include at least 3 specific desired learning objectives in list format.  
+
+* I hope to learn R programming especially for data analytics and visualization
+
+* I hope to learn more about git and R packages
+
+* I hope to learn more about ANOVA and Monte Carlo procedures with application of R
+
+### Part B
+To this, add 3 density functions (Appendix Cassella & Berger) in centered format with equation number, i.e. format this as you would find in a journal.  
+
+\begin{eqnarray}
+f(x) = 3x^2, 0<x<1
+\end{eqnarray}
+
+\begin{eqnarray}
+f(x) = \frac{1}{\pi}\frac{1}{1+x^2}, -\infty<x<+\infty
+\end{eqnarray}
+
+\begin{eqnarray}
+f(x) = \begin{cases}
+\frac{1}{b-a},   a<x<b, \\
+0, x \geq b \quad and \quad x\leq a
+\end{cases}
+\end{eqnarray}
+
+# Problem 3
+
+A quote from Donoho (1995): "an article about computational results is advertising, not scholarship. The actual scholarship is the full software environment, code and data, that produced the result."  To the document created in Problem 4, add a summary of the steps in performing Reproducible Research in numbered list format as detailed in:  
+<http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1003285>.  
+\newline
+Next to each item, comment on any challenges you see in performing the step.  If you are interested in learning more, a good summary of why this is important can be found in  
+- <https://www.informs.org/ORMS-Today/Public-Articles/October-Volume-38-Number-5/Reproducible-Operations-Research>  
+- <https://doi.org/10.1093/biostatistics/kxq028>  
+- <http://statweb.stanford.edu/~wavelab/Wavelab_850/wavelab.pdf>
+
+Summary:
+
+* Rule 1: For Every Result, Keep Track of How It Was Produced
+* Rule 2: Avoid Manual Data Manipulation Steps
+* Rule 3: Archive the Exact Versions of All External Programs Used
+* Rule 4: Version Control All Custom Scripts
+* Rule 5: Record All Intermediate Results, When Possible in Standardized Formats
+* Rule 6: For Analyses That Include Randomness, Note Underlying Random Seeds
+* Rule 7: Always Store Raw Data behind Plots
+* Rule 8: Generate Hierarchical Analysis Output, Allowing Layers of Increasing Detail to Be Inspected
+* Rule 9: Connect Textual Statements to Underlying Results
+* Rule 10: Provide Public Access to Scripts, Runs, and Results
+
+Challenge: Coding could be learned from learning files in google and so on. But when dealing with different kinds of data with unfamiliar background, it is hard to do background research and use appropriate method.
+
+# Problem 4
+
+Please create and include a basic scatter plot and histogram of an internal R dataset.  To get a list of the datasets available use `library(help="datasets")`.
+
+```{r}
+data(faithful)   
+duration = faithful$eruptions   
+waiting = faithful$waiting 
+plot(waiting~duration, xlab="Eruption duration", ylab="Time waited")  
+hist(duration)
+hist(waiting)
+```
+
+**This document containing solutions to Problems 2-4 should be typed in RMarkdown, using proper English, and knitted to create a pdf document.  Do NOT print, we will use git to submit this assignment as detailed below.**
+
+# Problem 5
+Please knit this document to PDF (name should be `HW2_pid`) and push to GitHub:
+
+In the R Terminal, type:  
+\begin{enumerate}
+    \item git pull  
+    \item git add HW1\_pid.[pR]*  (NOTE: this should add two files)  
+    \item git commit -m "final HW1 submission"   
+    \item git push
+\end{enumerate}
+
+A more detailed description is on the course website under *Submitting Homework*.
+
+## Reminder on where to find Git help:  
+Read through the Git help Chapters 1 and 2. <https://git-scm.com/book/en/v2>
+
+
+
+
+
+
