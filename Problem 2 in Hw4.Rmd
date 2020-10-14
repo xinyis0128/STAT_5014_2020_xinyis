@@ -38,10 +38,13 @@ alpha = 0.01
 while((abs(theta[1] - THETA[1])>1e-06) || (abs(theta[2] - THETA[2])>1e-06)){
   THETA = theta
   h_0 = X%*%THETA
+  ## ok, first time I have seen sweep used in this, nice and clean, not sure it is particularly "fast"
   h_y = sweep(as.matrix(h_0), 1, h, '-')
+  ## mean = slow, I gave that as an example in a couple of lectures, better to do sum(x)/length(x) and even better to not have to calc length(x) on every loop
   theta[1] = THETA[1] - alpha*mean(h_y)
   h_yx = sweep(h_y, 1, as.matrix(X[,2]), '*')
   theta[2] = THETA[2] - alpha*mean(h_yx)
+  ## probably need a way to stop, Gradient Descent is NOT guaranteed to converge, so add an iterator and a stopping value when you have done enough iterating
 }
 print(theta)
 # regression 
