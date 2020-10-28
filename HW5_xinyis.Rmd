@@ -1,0 +1,112 @@
+---
+title: "HW5_xinyis"
+author: "Xinyi Song"
+date: "10/27/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+For each assignment, turn in by the due date/time.  Late assignments must be arranged prior to submission.  In every case, assignments are to be typed neatly using proper English in Markdown.  
+
+This week, we spoke about Exploratory Data Analysis and plotting. To begin the homework, we will as usual, start by loading, munging and  creating tidy data sets.  In this homework, our goal is to create informative (and perhaps pretty) plots showing features or perhaps deficiencies in the data.
+
+
+## Problem 2
+
+Create a new R Markdown file within your local GitHub repo folder (file-->new-->R Markdown-->save as).
+
+The filename should be: HW5_lastname, i.e. for me it would be HW5_Settlage
+
+You will use this new R Markdown file to solve the following problems.
+
+## Problem 3
+
+`Solution`
+
+Using tidy concepts, get and clean the following data on education from the World Bank.
+
+<http://databank.worldbank.org/data/download/Edstats_csv.zip>
+
+How many data points were there in the complete dataset?  In your cleaned dataset?
+
+Choosing 2 countries, create a summary table of indicators for comparison.
+
+```{r}
+library(tidyverse)
+library(dplyr)
+dat <- read.csv("~/Desktop/VTCourse/STAT 5014/HW5/Edstats_csv/EdStatsData.csv")
+num_obs_complete = dim(dat)[1]
+print(num_obs_complete)
+```
+
+
+Based on the results above, we can see that there are 886930 observations in the complete dataset.
+
+```{r}
+# Column 70 is the empty column
+# Delete the empty column 
+k = matrix(0,1, dim(dat)[2])
+for (i in 1:dim(dat)[2]){
+  k[i] = FALSE %in% (is.na(dat[,i]))
+}
+full_null = which(k==0)
+data = dat[,-full_null]
+clean_dat = data%>%gather(key = 'Year', value = 'Value', 5:69, na.rm = TRUE) 
+print(dim(clean_dat)[1])
+```
+
+In my cleaned dataset, there are 5082201 observations.
+
+```{r, warning=FALSE}
+summary_table = clean_dat %>% select(Indicator.Code, Country.Code, Value) %>% filter(Country.Code == c('ZWE', 'MUS'))%>% group_by(Indicator.Code, Country.Code)%>% summarise(Mean = mean(Value), 'Median' = median(Value))
+knitr::kable(summary_table[1:20,])
+```
+
+For this part, I choose the country 'ZWE' and 'MUS'. And the first 20 obs of summary_table is above. 
+
+## Problem 4
+
+Using *base* plotting functions, create a single figure that is composed of the first two rows of plots from SAS's simple linear regression diagnostics as shown here: <https://support.sas.com/rnd/app/ODSGraphics/examples/reg.html>.  Demonstrate the plot using suitable data from problem 3.
+
+```{r}
+library(tidyverse)
+library(dplyr)
+library(MASS)
+CHN_dat <- clean_dat %>% filter(Country.Code == 'CHN')%>% group_by(Year)%>% summarise(sum(Value))
+dat = as.data.frame(CHN_dat)
+k = as.numeric(gsub('X', '', dat$Year))
+data_CHN = as.data.frame(cbind(k, dat$`sum(Value)`))
+colnames(data_CHN) = c('Year', 'Value')
+fit = lm(Value~ as.numeric(Year), data = as.data.frame(data_CHN))
+par(mfrow=c(1,3))
+plot(fit$residuals, fit$fitted.values, xlab = 'Predicted Value', ylab = 'Residual')
+plot(studres(fit) ,  fit$fitted.values, xlab = 'Predicted Value', ylab = 'RStudent')
+plot(hatvalues(fit),fit$fitted.values, xlab = 'Predicted Value', ylab = 'Leverage')
+qqnorm(fit$residuals)
+qqline(fit$residuals)
+plot(data_CHN$Value, fit$fitted.values, xlab = 'Predicted Value',ylab = 'Value')
+plot(cooks.distance(fit), xlab = 'Observations', ylab = "Cook's D")
+```
+
+Here for the linear regression, I mainly focus analyze country of China, the relationship between value and year.
+
+## Problem 5
+
+Recreate the plot in problem 3 using ggplot2 functions.  Note: there are many extension libraries for ggplot, you will probably find an extension to the ggplot2 functionality will do exactly what you want.
+
+```{r}
+devtools::install_github("yeukyul/lindia")
+library(lindia)
+gg_diagnose(fit)
+```
+
+## Problem 6
+
+Finish this homework by pushing your changes to your repo.
+
+**Only submit the .Rmd and .pdf solution files.  Names should be formatted HW5_lastname_firstname.Rmd and HW5_lastname_firstname.pdf**
+
+
